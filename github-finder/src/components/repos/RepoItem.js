@@ -7,7 +7,7 @@ function RepoItem({ repo }) {
   return (
     <div className="card">
       <h3>
-        <a href={html_url} target="_blank" alt={`Repo ${name} on GitHub`}>
+        <a href={html_url} target="_blank" rel="noreferrer noopener" alt={`Repo ${name} on GitHub`}>
           {name}
         </a>
       </h3>

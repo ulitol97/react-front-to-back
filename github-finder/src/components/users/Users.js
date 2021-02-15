@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+import GithubContext from "../../context/github/githubContext";
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
 
@@ -9,7 +10,11 @@ const userStyle = {
   gap: "1rem",
 };
 
-const Users = ({ users, loading, error, results }) => {
+const Users = (props) => {
+  // Recover context and destructure its contents
+  const githubContext = useContext(GithubContext);
+  const { users, loading, error, results } = githubContext;
+
   if (loading) {
     return <Spinner />;
   } else if (error) {
@@ -21,7 +26,7 @@ const Users = ({ users, loading, error, results }) => {
         {results != null && (
           <Fragment>
             <h3>
-              {results} {results == 1 ? "result" : "results"}
+              {results} {results === 1 ? "result" : "results"}
             </h3>
           </Fragment>
         )}

@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import GithubContext from "../../context/github/githubContext";
 import Spinner from "../layout/Spinner";
 import Repos from "../repos/Repos";
 
 const User = (props) => {
-  const { getUser, getUserRepos, user, repos, loading, error } = props;
+  const githubContext = useContext(GithubContext);
+  const { user, getUser, repos, getUserRepos, loading, error } = githubContext;
+  const { match } = props;
   const {
     name,
     avatar_url,
@@ -24,9 +27,10 @@ const User = (props) => {
 
   // On mount, make App fetch the user info
   useEffect(() => {
-    const username = props.match.params.login;
+    const username = match.params.login;
     getUser(username);
     getUserRepos(username);
+    //eslint-disable-next-line
   }, []);
 
   if (loading) {
@@ -39,7 +43,7 @@ const User = (props) => {
         <Link to="/" className="btn btn-light">
           <i className="fas fa-arrow-circle-left" /> Back to search
         </Link>
-        Hireable: {" "}
+        Hireable:{" "}
         {hireable == null ? (
           <i className="fas fa-check text-success" />
         ) : (
@@ -63,7 +67,12 @@ const User = (props) => {
                 <p>{bio}</p>
               </Fragment>
             )}
-            <a href={html_url} target="_blank" className="btn btn-dark my-1">
+            <a
+              href={html_url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="btn btn-dark my-1"
+            >
               See on GitHub
             </a>
             <ul>
@@ -104,7 +113,7 @@ const User = (props) => {
             <hr />
             <h3>
               {repos.length}{" "}
-              {`public ${repos.length == 1 ? "repository" : "repositories"}`}
+              {`public ${repos.length === 1 ? "repository" : "repositories"}`}
             </h3>
             <Repos repos={repos} />
           </Fragment>
