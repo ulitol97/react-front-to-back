@@ -412,3 +412,8 @@ table th {
     justify-content: center;
   }
 }
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
