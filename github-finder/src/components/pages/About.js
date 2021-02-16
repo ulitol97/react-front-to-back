@@ -5,7 +5,7 @@ const About = () => {
     <div>
       <h1>About this app</h1>
       <p>
-        App to search for GitHub users and visualize their information via
+        App to search for GitHub users and visualize their information thanks to
         GitHub's public API.
       </p>
       <p>&#169;{new Date().getFullYear()}</p>
