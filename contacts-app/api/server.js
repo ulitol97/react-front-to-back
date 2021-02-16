@@ -1,19 +1,28 @@
+const dotenv = require("dotenv");
 const express = require("express");
+const connectDb = require("./config/db");
+dotenv.config();
 
-// Set up express server
-const PORT = process.env.PORT || 5000;
+// Connect to DB
+connectDb();
+
+// Start express server
 const app = express();
+runServer(app);
 
-// Routes
-const routes = {
-  users: require("./routes/users"),
-  auth: require("./routes/auth"),
-  contacts: require("./routes/contacts"),
-};
+function runServer() {
+  // Routes
+  const routes = {
+    users: require("./routes/users"),
+    auth: require("./routes/auth"),
+    contacts: require("./routes/contacts"),
+  };
 
-app.use("/api/users", routes.users);
-app.use("/api/auth", routes.auth);
-app.use("/api/contacts", routes.contacts);
+  app.use("/api/users", routes.users);
+  app.use("/api/auth", routes.auth);
+  app.use("/api/contacts", routes.contacts);
 
-// Launch
-app.listen(PORT, () => console.log(`Server running on port ${PORT}.`));
+  // Launch
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}.`));
+}
