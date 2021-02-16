@@ -11,10 +11,20 @@ import {
 import GithubContext from "./githubContext";
 import GithubReducer from "./githubReducer";
 
+let githubClientId, githubClientSecret;
+
+if (process.env.NODE_ENV !== "production") {
+  githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  githubClientId = process.env.GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+}
+
 // Initial state and related actions
 const GithubState = (props) => {
   const apiUrl = "https://api.github.com";
-  const apiCredentialsString = `?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
+  const apiCredentialsString = `?client_id=${githubClientId}&client_secret=${githubClientSecret}`;
   const usernamePlaceholder = "[USER_NAME_PLACEHOLDER]";
 
   const usersSearchEndpoint = `search/users${apiCredentialsString}`;
