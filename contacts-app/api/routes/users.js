@@ -2,7 +2,7 @@ const express = require("express");
 const { check, validationResult } = require("express-validator/check");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const createJWT = require("../utils/jwt");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -31,7 +31,7 @@ router.post(
     const { name, surname, email, password } = req.body;
 
     try {
-      let user = await findUser({ email });
+      let user = await User.findOne({ email });
 
       if (user) {
         res.status(403).json({ msg: "User already exists" });
@@ -60,11 +60,6 @@ router.post(
   }
 );
 
-async function findUser(query) {
-  const user = await User.findOne(query);
-  return user;
-}
-
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
@@ -74,25 +69,5 @@ async function hashPassword(password) {
     hash,
   };
 }
-
-const createJWT = (user, expires, callback) => {
-  const payload = {
-    user: {
-      id: user.id,
-    },
-  };
-
-  jwt.sign(
-    payload,
-    process.env.JWT_SECRET,
-    {
-      expiresIn: 3600 * 4 || expires,
-    },
-    (err, jwt) => {
-      if (err) throw err;
-      callback(jwt);
-    }
-  );
-};
 
 module.exports = router;
