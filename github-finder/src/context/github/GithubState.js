@@ -58,7 +58,7 @@ const GithubState = (props) => {
 
   // Get user: load GitHub specific user by username
   async function getUser(username) {
-    // clearUser();
+    clearUser();
     const fetchedUser = await get(
       `${usersProfileEndpoint.replace(usernamePlaceholder, username)}`
     );
