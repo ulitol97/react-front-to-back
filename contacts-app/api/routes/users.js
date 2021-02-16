@@ -1,5 +1,4 @@
 const express = require("express");
-const user = require("../models/User");
 const { check, validationResult } = require("express-validator/check");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
@@ -32,7 +31,8 @@ router.post(
     const { name, surname, email, password } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      let user = await findUser({ email });
+
       if (user) {
         res.status(403).json({ msg: "User already exists" });
       }
@@ -45,33 +45,54 @@ router.post(
         password,
       });
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      user.password = (await hashPassword(user.password)).hash;
 
       // Store in DB
       await user.save();
 
       // Create JWT
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        {
-          expiresIn: 3600 * 4,
-        },
-        (err, token) => {
-          if (err) throw err;
-          res.status(201).json({ token });
-        }
-      );
+      createJWT(user, null, (token) => {
+        res.status(201).json({ token });
+      });
     } catch (err) {
       res.status(500).send(`Error registering user: ${err}`);
     }
   }
 );
+
+async function findUser(query) {
+  const user = await User.findOne(query);
+  return user;
+}
+
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+
+  return {
+    salt,
+    hash,
+  };
+}
+
+const createJWT = (user, expires, callback) => {
+  const payload = {
+    user: {
+      id: user.id,
+    },
+  };
+
+  jwt.sign(
+    payload,
+    process.env.JWT_SECRET,
+    {
+      expiresIn: 3600 * 4 || expires,
+    },
+    (err, jwt) => {
+      if (err) throw err;
+      callback(jwt);
+    }
+  );
+};
 
 module.exports = router;
