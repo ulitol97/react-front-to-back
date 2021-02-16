@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Fragment, useContext } from "react";
 import GithubContext from "../../context/github/githubContext";
 import Spinner from "../layout/Spinner";
@@ -17,7 +16,7 @@ const Users = (props) => {
 
   if (loading) {
     return <Spinner />;
-  } else if (error) {
+  } else if (error && !users) {
     return `Error: ${error}`;
   } else {
     return (
@@ -38,17 +37,6 @@ const Users = (props) => {
       </Fragment>
     );
   }
-};
-
-Users.defaultProps = {
-  results: null,
-};
-
-Users.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.object,
-  users: PropTypes.array.isRequired,
-  results: PropTypes.number,
 };
 
 export default Users;

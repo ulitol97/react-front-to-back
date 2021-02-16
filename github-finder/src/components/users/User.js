@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import GithubContext from "../../context/github/githubContext";
@@ -35,8 +34,15 @@ const User = (props) => {
 
   if (loading) {
     return <Spinner />;
-  } else if (error) {
-    return `Error: ${error}`;
+  } else if (error && !user.login) {
+    return (
+      <Fragment>
+        <Link to="/" className="btn btn-light">
+          <i className="fas fa-arrow-circle-left" /> Back to search
+        </Link>
+        <p>{`Error: ${error}`}</p>
+      </Fragment>
+    );
   } else {
     return (
       <Fragment>
@@ -121,15 +127,6 @@ const User = (props) => {
       </Fragment>
     );
   }
-};
-
-User.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  user: PropTypes.object.isRequired,
-  repos: PropTypes.array.isRequired,
-  getUser: PropTypes.func.isRequired,
-  getUserRepos: PropTypes.func.isRequired,
-  error: PropTypes.object,
 };
 
 export default User;

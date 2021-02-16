@@ -1,6 +1,13 @@
 import { useReducer } from "react";
 import useFetch from "use-http";
-import { CLEAR_USERS, GET_REPOS, GET_USERS, SEARCH_USERS } from "../types";
+import {
+  CLEAR_REPOS,
+  CLEAR_USER,
+  CLEAR_USERS,
+  GET_REPOS,
+  GET_USERS,
+  SEARCH_USERS
+} from "../types";
 import GithubContext from "./githubContext";
 import GithubReducer from "./githubReducer";
 
@@ -21,8 +28,6 @@ const GithubState = (props) => {
     user: {},
     repos: [],
     results: null,
-    loading,
-    error,
   };
 
   const [state, dispatch] = useReducer(GithubReducer, initialState);
@@ -43,6 +48,7 @@ const GithubState = (props) => {
 
   // Get user: load GitHub specific user by username
   async function getUser(username) {
+    clearUser();
     const fetchedUser = await get(
       `${usersProfileEndpoint.replace(usernamePlaceholder, username)}`
     );
@@ -56,6 +62,8 @@ const GithubState = (props) => {
 
   // Get repos: load user's repos by username
   async function getUserRepos(username) {
+    clearRepos();
+
     const fetchedRepos = await get(
       `${usersReposEndpoint.replace(usernamePlaceholder, username)}`
     );
@@ -74,16 +82,32 @@ const GithubState = (props) => {
     });
   }
 
+  // Clear user: clear selected user from state
+  function clearUser() {
+    dispatch({
+      type: CLEAR_USER,
+    });
+  }
+
+  // Clear repos: clear repos from state
+  function clearRepos() {
+    dispatch({
+      type: CLEAR_REPOS,
+    });
+  }
+
   return (
     <GithubContext.Provider
       value={{
         users: state.users,
         user: state.user,
         repos: state.repos,
+        loading: loading,
+        error: error,
         searchUsers,
         clearUsers,
         getUser,
-        getUserRepos
+        getUserRepos,
       }}
     >
       {props.children}
