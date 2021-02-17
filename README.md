@@ -1,6 +1,2 @@
-React Front to Back course.
+Tasks for the course "React Front To Back".
 
-# Notes
-- Equivalence:
-  1. HTML classes: "class" => "className"
-  2. HTML form labels: "for" => "htmlFor"
