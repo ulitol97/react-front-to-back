@@ -7,6 +7,7 @@ import {
   DELETE_CONTACT,
   FILTER_CONTACTS,
   SET_CURRENT,
+  SET_FILTER,
   UPDATE_CONTACT
 } from "../types";
 import ContactContext from "./contactContext";
@@ -16,6 +17,7 @@ const ContactState = (props) => {
   const initialState = {
     current: null, // Currently selected contact
     filtered: null, // Array of filtered contacts
+    filter: "",
     contacts: [
       // Contacts in UI
       {
@@ -99,6 +101,14 @@ const ContactState = (props) => {
     });
   }
 
+  // Set filter
+  function setFilter(filter) {
+    dispatch({
+      type: SET_FILTER,
+      payload: filter,
+    });
+  }
+
   // Clear filter
   function clearFilter(filter) {
     dispatch({
@@ -112,12 +122,14 @@ const ContactState = (props) => {
         current: state.current,
         contacts: state.contacts,
         filtered: state.filtered,
+        filter: state.filter,
         addContact,
         deleteContact,
         updateContact,
         setCurrent,
         clearCurrent,
         filterContacts,
+        setFilter,
         clearFilter,
       }}
     >

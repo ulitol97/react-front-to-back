@@ -5,6 +5,7 @@ import {
   DELETE_CONTACT,
   FILTER_CONTACTS,
   SET_CURRENT,
+  SET_FILTER,
   UPDATE_CONTACT
 } from "../types";
 
@@ -16,9 +17,9 @@ export default function reducer(state, action) {
     case DELETE_CONTACT:
       return {
         ...state,
-        filtered: state.filtered.filter(
-          (contact) => contact.id !== action.payload.id
-        ),
+        filtered:
+          state.filtered &&
+          state.filtered.filter((contact) => contact.id !== action.payload.id),
         contacts: state.contacts.filter(
           (contact) => contact.id !== action.payload.id
         ),
@@ -37,6 +38,9 @@ export default function reducer(state, action) {
 
     case CLEAR_CURRENT:
       return { ...state, current: null };
+
+    case SET_FILTER:
+      return { ...state, filter: action.payload };
 
     case FILTER_CONTACTS:
       const filter = action.payload.toLowerCase();

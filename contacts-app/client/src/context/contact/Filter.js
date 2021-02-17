@@ -1,27 +1,29 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import ContactContext from "../../context/contact/contactContext";
 
 const Filter = () => {
-  const text = useRef();
+  const { filter, filterContacts, setFilter, clearFilter } = useContext(
+    ContactContext
+  );
 
-  const { filterContacts, clearFilter } = useContext(ContactContext);
-
-  function onChange() {
-    const filter = text.current.value?.trim();
+  function onChange(e) {
+    if (e) setFilter(e.target.value);
+    const filter = e.target.value.trim();
 
     if (!filter) clearFilter();
-    else filterContacts(filter);
+    else {
+      filterContacts(filter);
+    }
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    onChange();
   }
 
   return (
     <form onSubmit={onSubmit}>
       <input
-        ref={text}
+        value={filter}
         type="text"
         placeholder="Filter..."
         onChange={onChange}
