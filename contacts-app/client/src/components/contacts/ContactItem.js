@@ -1,12 +1,28 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
+import ContactContext from "../../context/contact/contactContext";
 import { ContactTypesEnum } from "../../context/types";
 
 const ContactItem = ({ contact }) => {
   const { name, surname, email, phone, type } = contact;
 
+  const { current, deleteContact, setCurrent, clearCurrent } = useContext(
+    ContactContext
+  );
+
+  function onDelete() {
+    deleteContact(contact);
+    if (current === contact) {
+      clearCurrent();
+    }
+  }
+
+  function onEdit() {
+    setCurrent(contact);
+  }
+
   return (
-    <div className="card bg-light">
+    <div className={`card bg-${current === contact ? "selected" : "light"}`}>
       <h3 className="text-primary text-left">
         {`${name} ${surname}`}
         <span
@@ -33,8 +49,12 @@ const ContactItem = ({ contact }) => {
         )}
       </ul>
       <p>
-        <button className="btn btn-dark btn-sm">Edit</button>
-        <button className="btn btn-danger btn-sm">Delete</button>
+        <button className="btn btn-dark btn-sm" onClick={onEdit}>
+          Edit
+        </button>
+        <button className="btn btn-danger btn-sm" onClick={onDelete}>
+          Delete
+        </button>
       </p>
     </div>
   );

@@ -7,6 +7,7 @@
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --selected-color: aliceblue;
 }
 
 * {
@@ -239,6 +240,14 @@ img {
   color: #fff;
 }
 
+.btn-selected,
+.bg-selected,
+.badge-selected,
+.alert-selected {
+  background: var(--selected-color);
+  color: #333;
+}
+
 .btn-light,
 .bg-light,
 .badge-light,
@@ -295,7 +304,7 @@ img {
 
 /* Forms */
 input {
-  margin: 1.2rem 0;
+  margin: 0.5rem 0;
 }
 
 .form-text {
