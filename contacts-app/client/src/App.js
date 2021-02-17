@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import Navbar from "./components/layout/Navbar";
 import About from "./components/pages/About";
 import Home from "./components/pages/Home";
@@ -17,6 +19,8 @@ const App = () => {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Home}></Route>
+                <Route exact path="/register" component={Register}></Route>
+                <Route exact path="/login" component={Login}></Route>
                 <Route exact path="/about" component={About}></Route>
                 <Route component={NotFound}></Route>
               </Switch>

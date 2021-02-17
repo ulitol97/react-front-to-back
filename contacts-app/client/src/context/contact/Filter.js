@@ -26,6 +26,7 @@ const Filter = () => {
         value={filter}
         type="text"
         placeholder="Filter..."
+        autoFocus
         onChange={onChange}
       ></input>
     </form>
