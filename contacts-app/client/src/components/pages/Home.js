@@ -1,10 +1,13 @@
 import React from "react";
+import Contacts from "../contacts/Contacts";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Home.</h1>
-      <p>&#169;{new Date().getFullYear()}</p>
+    <div className="grid-2">
+      <h1>Contact form</h1>
+      <div>
+        <Contacts />
+      </div>
     </div>
   );
 };
