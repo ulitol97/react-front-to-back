@@ -11,11 +11,11 @@ import PrivateRoute from "./components/routing/PrivateRoute";
 import AlertState from "./context/alert/AlertState";
 import AuthState from "./context/auth/AuthState";
 import ContactState from "./context/contact/ContactState";
-import setAuthToken, { setDefaultHeaders } from "./utils/axiosConfig";
+import { setAuthInterceptor, setDefaultHeaders } from "./utils/axiosConfig";
 
 // Configure future axios calls
 setDefaultHeaders();
-setAuthToken();
+setAuthInterceptor();
 
 const App = () => {
   return (

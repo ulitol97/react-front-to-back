@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import setAuthToken from "../../utils/axiosConfig";
 import {
   AUTH_ERROR,
   CLEAR_ERRORS,
@@ -27,8 +26,6 @@ const AuthState = (props) => {
 
   // Load user
   async function loadUser() {
-    setAuthToken();
-
     try {
       const response = await axios.get("/api/auth");
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import setAuthToken from "../../utils/axiosConfig";
 import {
   ADD_CONTACT,
   CLEAR_CONTACTS,
@@ -30,8 +29,6 @@ const ContactState = (props) => {
 
   // Get contacts
   async function getContacts() {
-    setAuthToken();
-
     try {
       const response = await axios.get("/api/contacts");
       dispatch({
@@ -48,8 +45,6 @@ const ContactState = (props) => {
 
   // Create contact
   async function addContact(contactData) {
-    setAuthToken();
-
     try {
       const response = await axios.post("/api/contacts", contactData);
       dispatch({
@@ -57,7 +52,6 @@ const ContactState = (props) => {
         payload: response.data,
       });
     } catch (err) {
-      console.log(err);
       dispatch({
         type: CONTACT_ERROR,
         payload: err.response.data,
@@ -67,8 +61,6 @@ const ContactState = (props) => {
 
   // Delete contact
   async function deleteContact(id) {
-    setAuthToken();
-
     try {
       await axios.delete(`/api/contacts/${id}`);
       dispatch({
@@ -84,11 +76,22 @@ const ContactState = (props) => {
   }
 
   // Update contact
-  async function updateContact(contact) {
-    dispatch({
-      type: UPDATE_CONTACT,
-      payload: contact,
-    });
+  async function updateContact(contactData) {
+    try {
+      const response = await axios.put(
+        `/api/contacts/${contactData._id}`,
+        contactData
+      );
+      dispatch({
+        type: UPDATE_CONTACT,
+        payload: response.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: CONTACT_ERROR,
+        payload: err.response.data,
+      });
+    }
   }
 
   // Set current contact
