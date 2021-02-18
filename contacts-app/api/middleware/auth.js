@@ -7,9 +7,13 @@ module.exports = function (req, res, next) {
   // Check for tokens in header
   const token = req.header("x-auth-token");
   if (!token) {
-    return res
-      .status(401)
-      .json({ msg: "Invalid credentials. Token not present." });
+    return res.status(401).json({
+      errors: [
+        {
+          msg: "Invalid credentials. Token not present.",
+        },
+      ],
+    });
   }
 
   // Token is present, verify
@@ -20,8 +24,12 @@ module.exports = function (req, res, next) {
     req.user = decoded.user;
     next();
   } catch (err) {
-    return res
-      .status(401)
-      .json({ msg: "Invalid credentials. Token was invalid." });
+    return res.status(401).json({
+      errors: [
+        {
+          msg: "Invalid credentials. Token was invalid.",
+        },
+      ],
+    });
   }
 };
