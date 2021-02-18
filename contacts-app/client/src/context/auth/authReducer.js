@@ -12,6 +12,7 @@ import {
 export default function reducer(state, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       return {
         ...state,
@@ -21,6 +22,9 @@ export default function reducer(state, action) {
       };
 
     case REGISTER_FAILURE:
+    case LOGIN_FAILURE:
+    case AUTH_ERROR:
+    case LOGOUT:
       localStorage.removeItem("token");
       return {
         ...state,
@@ -28,23 +32,16 @@ export default function reducer(state, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
-        errors: action.payload.errors,
+        errors: action.payload?.errors || [],
       };
 
     case USER_LOADED:
-      return state;
-
-    case AUTH_ERROR:
-      return state;
-
-    case LOGIN_SUCCESS:
-      return state;
-
-    case LOGIN_FAILURE:
-      return state;
-
-    case LOGOUT:
-      return state;
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: action.payload,
+      };
 
     case CLEAR_ERRORS:
       return { ...state, errors: [] };

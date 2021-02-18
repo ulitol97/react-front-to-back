@@ -1,6 +1,16 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import { CLEAR_ERRORS, REGISTER_FAILURE, REGISTER_SUCCESS } from "../types";
+import setAuthToken from "../../utils/axiosConfig";
+import {
+  AUTH_ERROR,
+  CLEAR_ERRORS,
+  LOGIN_FAILURE,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REGISTER_FAILURE,
+  REGISTER_SUCCESS,
+  USER_LOADED
+} from "../types";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 
@@ -16,28 +26,36 @@ const AuthState = (props) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Load user
-  function loadUser() {
-    // TODO
+  async function loadUser() {
+    setAuthToken();
+
+    try {
+      const response = await axios.get("/api/auth");
+
+      dispatch({
+        type: USER_LOADED,
+        payload: response.data,
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: AUTH_ERROR,
+        payload: err.response.data,
+      });
+    }
   }
 
   // Register user
   async function registerUser(userData) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
     try {
-      const response = await axios.post("/api/users", userData, config);
+      const response = await axios.post("/api/users", userData);
 
       dispatch({
         type: REGISTER_SUCCESS,
         payload: response.data, // Token
       });
 
-      clearErrors();
+      loadUser();
     } catch (err) {
       console.log(err);
       dispatch({
@@ -48,13 +66,30 @@ const AuthState = (props) => {
   }
 
   // Login user
-  function login() {
-    // TODO
+  async function login(userData) {
+    try {
+      const response = await axios.post("/api/auth", userData);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: response.data, // Token
+      });
+
+      loadUser();
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: LOGIN_FAILURE,
+        payload: err.response.data, // Error message
+      });
+    }
   }
 
   // Logout
   function logout() {
-    // TODO
+    dispatch({
+      type: LOGOUT,
+    });
   }
 
   // Clear errors
@@ -76,6 +111,7 @@ const AuthState = (props) => {
         registerUser,
         login,
         logout,
+        clearErrors,
       }}
     >
       {props.children}
