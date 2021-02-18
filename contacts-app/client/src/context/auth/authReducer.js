@@ -1,18 +1,11 @@
 import {
   AUTH_ERROR,
-
   CLEAR_ERRORS,
-
-
-
   LOGIN_FAILURE,
   LOGIN_SUCCESS,
   LOGOUT,
   REGISTER_FAILURE,
   REGISTER_SUCCESS,
-
-
-
   USER_LOADED
 } from "../types";
 

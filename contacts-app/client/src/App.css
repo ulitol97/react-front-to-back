@@ -226,10 +226,47 @@ img {
 
 .alert {
   padding: 0.7rem;
-  margin: 1rem 0;
+  margin-top: 1rem;
   opacity: 0.9;
   background: var(--light-color);
   color: #333;
+
+  /* position: absolute;
+  width: 80%;
+  left: 10%; */
+}
+
+/* CUSTOM ALERTS CSS */
+.alert-container {
+  /* Overlay */
+  position: absolute;
+  bottom: 5%;
+  width: 35%;
+}
+
+.alert-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert .btn-alert {
+  background: none;
+  color: white;
+  padding: 0;
+}
+
+/* Mobile Alert */
+@media (max-width: 700px) {
+  .alert-container {
+    width: 80%;
+    left: 10%;
+    top: 5%;
+  }
+}
+
+.btn-transparent {
+  background-color: ;
 }
 
 .btn-primary,
@@ -407,6 +444,21 @@ table th {
 .item-exit-active {
   opacity: 0;
   transition: opacity 600ms ease-in;
+}
+
+.alert-enter {
+  transform: translateX(-600px);
+}
+.alert-enter-active {
+  transform: translateX(0px);
+  transition: transform 450ms linear;
+}
+.alert-exit {
+  transform: translateX(0px);
+}
+.alert-exit-active {
+  transform: translateX(-600px);
+  transition: transform 450ms linear;
 }
 
 /* Mobile Styles */

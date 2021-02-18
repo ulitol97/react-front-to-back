@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import AlertContext from "../../context/alert/alertContext";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -11,17 +12,32 @@ const Register = () => {
 
   const { name, surname, email, password, passwordRepeat } = user;
 
+  const { setAlert } = useContext(AlertContext);
+
   function onChange(e) {
     setUser({
       ...user,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value.trim(),
     });
   }
 
   function onSubmit(e) {
     e.preventDefault();
     // Attemp registration
-    console.log("Submit registration.");
+    const validated = validateUser();
+    if (validated) console.log("Submit registration.");
+  }
+
+  function validateUser() {
+    if (name === "" || surname === "" || email === "" || password === "") {
+      setAlert("Fill in all the fields", "danger");
+      return false;
+    } else if (password !== passwordRepeat) {
+      setAlert("Passwords do not match", "danger");
+      return false;
+    }
+
+    return true;
   }
 
   return (
@@ -30,7 +46,7 @@ const Register = () => {
         Account <span className="text-primary">register</span>
       </h1>
       <form onSubmit={onSubmit}>
-        <form className="form-group">
+        <div className="form-group">
           <label htmlFor="name">Name</label>
           <input
             required
@@ -88,7 +104,7 @@ const Register = () => {
             value="Register"
             className="btn btn-primary btn-block"
           />
-        </form>
+        </div>
       </form>
     </div>
   );
