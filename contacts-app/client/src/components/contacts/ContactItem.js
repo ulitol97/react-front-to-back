@@ -4,14 +4,14 @@ import ContactContext from "../../context/contact/contactContext";
 import { ContactTypesEnum } from "../../context/types";
 
 const ContactItem = ({ contact }) => {
-  const { name, surname, email, phone, type } = contact;
+  const { _id, name, surname, email, phone, type } = contact;
 
   const { current, deleteContact, setCurrent, clearCurrent } = useContext(
     ContactContext
   );
 
   function onDelete() {
-    deleteContact(contact);
+    deleteContact(_id);
     if (current === contact) {
       clearCurrent();
     }

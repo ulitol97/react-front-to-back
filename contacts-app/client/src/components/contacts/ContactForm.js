@@ -18,6 +18,7 @@ const ContactForm = () => {
   const { name, surname, email, phone, type } = contact;
 
   const {
+    errors,
     current,
     addContact,
     updateContact,
@@ -45,15 +46,25 @@ const ContactForm = () => {
 
   function onSubmit(e) {
     e.preventDefault();
+    // Remove empty fields in contact
+    removeEmpty();
     // Add contact
     if (current === null) {
       addContact(contact);
-      setContact(defaultContact);
+      if (!errors || errors.length === 0) setContact(defaultContact);
     }
     // Edit/update contact
     else {
       updateContact(contact);
-      setCurrent(contact);
+      if (!errors || errors.length === 0) setCurrent(contact);
+    }
+  }
+
+  function removeEmpty() {
+    for (const prop in contact) {
+      if (!contact[prop]) {
+        delete contact[prop];
+      }
     }
   }
 
