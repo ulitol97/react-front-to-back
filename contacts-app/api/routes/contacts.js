@@ -19,7 +19,14 @@ router.get("/", auth, async (req, res) => {
     });
     return res.status(200).json(contacts);
   } catch (err) {
-    return res.status(500).json({ msg: `Error listing contacts: ${err}` });
+    return res.status(500).json({
+      errors: [
+        {
+          msg: "Error fetching contacts.",
+        },
+      ],
+      msg: err.toString(),
+    });
   }
 });
 
@@ -57,7 +64,14 @@ router.post("/", [auth, ...contactCreateValidations], async (req, res) => {
     contact = await contact.save();
     return res.status(201).json(contact);
   } catch (err) {
-    return res.status(500).send({ msg: `Error creating contact: ${err}` });
+    return res.status(500).json({
+      errors: [
+        {
+          msg: "Error creating contact.",
+        },
+      ],
+      msg: err.toString(),
+    });
   }
 });
 
@@ -92,7 +106,11 @@ router.put(
       let contact = await Contact.findById(req.params.contactId);
       if (!contact) {
         return res.status(404).json({
-          msg: "The contact provided for update could not be found.",
+          errors: [
+            {
+              msg: "The contact provided for update could not be found.",
+            },
+          ],
         });
       }
       if (!contactBelongsToUser(contact, req.user)) {
@@ -108,7 +126,14 @@ router.put(
       );
       return res.status(201).json(contact);
     } catch (err) {
-      return res.status(500).send({ msg: `Error updating contact: ${err}` });
+      return res.status(500).json({
+        errors: [
+          {
+            msg: "Error updating contact.",
+          },
+        ],
+        msg: err.toString(),
+      });
     }
   }
 );
@@ -121,7 +146,11 @@ router.delete("/:contactId", auth, async (req, res) => {
     let contact = await Contact.findById(req.params.contactId);
     if (!contact) {
       return res.status(404).json({
-        msg: "The contact provided for deletion could not be found.",
+        errors: [
+          {
+            msg: "The contact provided for deletion could not be found.",
+          },
+        ],
       });
     }
     if (!contactBelongsToUser(contact, req.user)) {
@@ -133,7 +162,14 @@ router.delete("/:contactId", auth, async (req, res) => {
     await Contact.findByIdAndRemove(req.params.contactId);
     return res.sendStatus(204);
   } catch (err) {
-    return res.status(500).json({ msg: `Error removing contact: ${err}` });
+    return res.status(500).json({
+      errors: [
+        {
+          msg: "Error removing contact.",
+        },
+      ],
+      msg: err.toString(),
+    });
   }
 });
 

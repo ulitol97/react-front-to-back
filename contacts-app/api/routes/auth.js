@@ -17,9 +17,14 @@ router.get("/", auth, async (req, res) => {
     const user = await User.findById(req.user.id).select("-password"); // Do not return password
     return res.status(200).json(user);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: `Can't recover user data at the moment: ${err}` });
+    return res.status(500).json({
+      errors: [
+        {
+          msg: "Can't recover user data at the moment",
+        },
+      ],
+      msg: err.toString(),
+    });
   }
 });
 
@@ -48,23 +53,40 @@ router.post(
       // Check user existence
       let user = await User.findOne({ email });
       if (!user) {
-        res.status(403).json({ msg: "Credentials do not match any record." });
+        res.status(403).json({
+          errors: [
+            {
+              msg: "Credentials do not match any record.",
+            },
+          ],
+        });
       }
 
       // User exists, check password
       const isMatch = await bcrypt.compare(password, user.password); // Submitted passwd vs DB passwd
       if (!isMatch) {
-        return res
-          .status(403)
-          .json({ msg: "Credentials do not match any record." });
+        return res.status(403).json({
+          errors: [
+            {
+              msg: "Credentials do not match any record.",
+            },
+          ],
+        });
       }
 
       // Credentials are right, login (grant JWT)
       createJWT(user, null, (token) => {
-        res.status(201).json({ token });
+        return res.status(201).json({ token });
       });
     } catch (err) {
-      res.status(500).send(`Unexpected error during the login process: ${err}`);
+      return res.status(500).json({
+        errors: [
+          {
+            msg: "Unexpected error during the login process.",
+          },
+        ],
+        msg: err.toString(),
+      });
     }
   }
 );

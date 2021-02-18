@@ -22,12 +22,10 @@ router.post(
   async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-      return res
-        .status(400)
-        .json({
-          msg: "Invalid user information",
-          errors: validationErrors.array(),
-        });
+      return res.status(400).json({
+        msg: "Invalid user information",
+        errors: validationErrors.array(),
+      });
     }
 
     // Request body contains validated data
@@ -37,7 +35,13 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(403).json({ msg: "User already exists" });
+        return res.status(403).json({
+          errors: [
+            {
+              msg: "User already exists",
+            },
+          ],
+        });
       }
 
       // Create user instance and hash password
