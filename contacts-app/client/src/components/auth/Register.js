@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AlertContext from "../../context/alert/alertContext";
+import AuthContext from "../../context/auth/authContext";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -13,6 +14,13 @@ const Register = () => {
   const { name, surname, email, password, passwordRepeat } = user;
 
   const { setAlert } = useContext(AlertContext);
+  const { registerUser, errors } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (errors.length !== 0) {
+      setAlert(errors[0].msg, "danger");
+    }
+  }, [errors]);
 
   function onChange(e) {
     setUser({
@@ -25,7 +33,14 @@ const Register = () => {
     e.preventDefault();
     // Attemp registration
     const validated = validateUser();
-    if (validated) console.log("Submit registration.");
+    if (validated) {
+      registerUser({
+        name,
+        surname,
+        email,
+        password,
+      });
+    }
   }
 
   function validateUser() {

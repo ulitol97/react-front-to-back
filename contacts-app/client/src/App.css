@@ -266,7 +266,7 @@ img {
 }
 
 .btn-transparent {
-  background-color: ;
+  background-color: none;
 }
 
 .btn-primary,
@@ -447,7 +447,7 @@ table th {
 }
 
 .alert-enter {
-  transform: translateX(-600px);
+  transform: translateX(-800px);
 }
 .alert-enter-active {
   transform: translateX(0px);
@@ -457,7 +457,7 @@ table th {
   transform: translateX(0px);
 }
 .alert-exit-active {
-  transform: translateX(-600px);
+  transform: translateX(-800px);
   transition: transform 450ms linear;
 }
 

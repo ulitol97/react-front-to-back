@@ -12,10 +12,24 @@ import {
 export default function reducer(state, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      return state;
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        token: action.payload.token,
+        isAuthenticated: true,
+        loading: false,
+      };
 
     case REGISTER_FAILURE:
-      return state;
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        errors: action.payload.errors,
+      };
 
     case USER_LOADED:
       return state;
@@ -33,7 +47,7 @@ export default function reducer(state, action) {
       return state;
 
     case CLEAR_ERRORS:
-      return state;
+      return { ...state, errors: [] };
 
     default:
       return state;
