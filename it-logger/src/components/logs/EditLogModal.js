@@ -1,15 +1,28 @@
 import M from "materialize-css/dist/js/materialize.min.js";
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux"; // Bridges component with redux
+import { updateLog } from "../../actions/logActions";
 
-const EditLogModal = () => {
+const EditLogModal = ({ current, updateLog }) => {
   const [message, setMessage] = useState("");
-  const [attention, setAttention] = useState(false);
-  const [tech, setTech] = useState();
+  const [attention, setAttention] = useState("");
+  const [tech, setTech] = useState("");
+
+  // Initial form data equals the data of the selected log
+  useEffect(() => {
+    if (current) {
+      setMessage(current.message);
+      setAttention(current.attention);
+      setTech(current.tech);
+    }
+  }, [current]);
 
   function onSubmit() {
     const validated = validateLog();
     if (validated) {
-      console.log("Submit edit");
+      updateLog({ ...current, message, attention, tech, date: new Date() });
+      M.toast({ html: `Log edited by ${tech}` });
     }
 
     clearFields();
@@ -17,10 +30,7 @@ const EditLogModal = () => {
 
   function validateLog() {
     if (message.trim() === "" || tech.trim === "") {
-      M.toast({
-        html: "Fill in all fields",
-        classes: "white-text",
-      });
+      M.toast({ html: "Fill in all fields" });
       return false;
     }
 
@@ -45,9 +55,6 @@ const EditLogModal = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <label htmlFor="message" className="active">
-              Log message
-            </label>
           </div>
         </div>
         <div className="row">
@@ -104,4 +111,14 @@ const modalStyle = {
   height: "75%",
 };
 
-export default EditLogModal;
+// Pieces of the root reducer's state we want available as props
+const mapStateToProps = (state) => ({
+  current: state.log.current,
+});
+
+EditLogModal.propTypes = {
+  log: PropTypes.object.isRequired,
+  updateLog: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, { updateLog })(EditLogModal);
