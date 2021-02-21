@@ -1,24 +1,28 @@
 import M from "materialize-css/dist/js/materialize.min.js";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
+import { connect } from "react-redux"; // Bridges component with redux
+import { addTech } from "../../actions/techActions";
 
-const AddTechModal = () => {
+const AddTechModal = ({ addTech }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
   function onSubmit() {
     const validated = validateTech();
     if (validated) {
-      console.log("Submit technician.");
+      addTech({
+        firstName,
+        lastName,
+      });
+      M.toast({ html: `Added technician: ${firstName} ${lastName}` });
     }
     clearFields();
   }
 
   function validateTech() {
     if (firstName.trim() === "" || lastName.trim === "") {
-      M.toast({
-        html: "Fill in all fields",
-        classes: "white-text",
-      });
+      M.toast({ html: "Fill in all fields" });
       return false;
     }
 
@@ -74,4 +78,8 @@ const AddTechModal = () => {
   );
 };
 
-export default AddTechModal;
+AddTechModal.propTypes = {
+  addTech: PropTypes.func.isRequired,
+};
+
+export default connect(null, { addTech })(AddTechModal);

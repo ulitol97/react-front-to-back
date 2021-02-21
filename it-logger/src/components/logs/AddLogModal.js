@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux"; // Bridges component with redux
 import { addLog } from "../../actions/logActions";
+import TechSelectOptions from "../techs/TechSelectOptions";
 
 const AddLogModal = ({ addLog }) => {
   const [message, setMessage] = useState("");
   const [attention, setAttention] = useState(false);
-  const [tech, setTech] = useState();
+  const [tech, setTech] = useState("");
 
   function onSubmit() {
     const validated = validateLog();
@@ -30,7 +31,7 @@ const AddLogModal = ({ addLog }) => {
   function clearFields() {
     setMessage("");
     setAttention(false);
-    setTech(null);
+    setTech("");
   }
 
   return (
@@ -53,18 +54,16 @@ const AddLogModal = ({ addLog }) => {
         <div className="row">
           <div className="input-field">
             <select
-              defaultValue="_default"
+              // defaultValue="_default"
               className="browser-default"
               name="tech"
-              value={tech}
+              value={tech || "_default"}
               onChange={(e) => setTech(e.target.value)}
             >
               <option value="_default" disabled>
                 Select technician
               </option>
-              <option value="John">John</option>
-              <option value="Mark">Mark</option>
-              <option value="Susan">Susan</option>
+              <TechSelectOptions />
             </select>
           </div>
         </div>
@@ -107,7 +106,6 @@ const modalStyle = {
 AddLogModal.propTypes = {
   addLog: PropTypes.func.isRequired,
 };
-
 
 // Link component with redux store: connect(pieces of state we need, {actions we need})(Component)
 // Pieces of state and actions are passed as props

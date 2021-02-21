@@ -3,45 +3,16 @@
     {
       "message": "Log 1",
       "attention": false,
-      "tech": "John",
-      "date": "2021-02-20T23:38:43.816Z",
+      "tech": "John Doe",
+      "date": "2021-02-21T01:36:04.184Z",
       "id": 1
-    },
-    {
-      "message": "Log 2",
-      "attention": true,
-      "tech": "Mark",
-      "date": "2021-02-20T23:38:43.816Z",
-      "id": 2
-    },
-    {
-      "message": "Log 3",
-      "attention": true,
-      "tech": "Susan",
-      "date": "2021-02-21T00:20:30.672Z",
-      "id": 3
     }
   ],
   "techs": [
     {
-      "id": 1,
       "firstName": "John",
-      "lastName": "Doe"
-    },
-    {
-      "id": 2,
-      "firstName": "Sam",
-      "lastName": "Smith"
-    },
-    {
-      "id": 3,
-      "firstName": "Sara",
-      "lastName": "Wilson"
-    },
-    {
-      "firstName": "Bilbo",
-      "lastName": "Bolson",
-      "id": 4
+      "lastName": "Doe",
+      "id": 1
     }
   ]
 }

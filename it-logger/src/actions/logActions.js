@@ -25,7 +25,7 @@ export const getLogs = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGS_ERROR,
-      payload: err.response.data,
+      payload: err.response.statusText,
     });
   } finally {
     setLoading(false);
@@ -53,7 +53,7 @@ export const addLog = (logData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGS_ERROR,
-      payload: err.response.data,
+      payload: err.response.statusText,
     });
   } finally {
     setLoading(false);
@@ -83,7 +83,7 @@ export const updateLog = (logData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGS_ERROR,
-      payload: err.response.data,
+      payload: err.response.statusText,
     });
   } finally {
     setLoading(false);
@@ -106,7 +106,7 @@ export const deleteLog = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGS_ERROR,
-      payload: err.response.data,
+      payload: err.response.statusText,
     });
   } finally {
     setLoading(false);
@@ -128,7 +128,7 @@ export const searchLogs = (query) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOGS_ERROR,
-      payload: err.response.data,
+      payload: err.response.statusText,
     });
   } finally {
     setLoading(false);
@@ -150,7 +150,7 @@ export function clearCurrent() {
   };
 }
 
-// Set loading to true
+// Set loading value
 export function setLoading(loading) {
   return {
     type: SET_LOADING,

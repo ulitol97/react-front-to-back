@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux"; // Bridges component with redux
 import { updateLog } from "../../actions/logActions";
+import TechSelectOptions from "../techs/TechSelectOptions";
 
 const EditLogModal = ({ current, updateLog }) => {
   const [message, setMessage] = useState("");
@@ -29,7 +30,7 @@ const EditLogModal = ({ current, updateLog }) => {
   }
 
   function validateLog() {
-    if (message.trim() === "" || tech.trim === "") {
+    if (message.trim() === "" || !tech || tech.trim === "") {
       M.toast({ html: "Fill in all fields" });
       return false;
     }
@@ -40,7 +41,7 @@ const EditLogModal = ({ current, updateLog }) => {
   function clearFields() {
     setMessage("");
     setAttention(false);
-    setTech(null);
+    setTech("");
   }
 
   return (
@@ -60,18 +61,15 @@ const EditLogModal = ({ current, updateLog }) => {
         <div className="row">
           <div className="input-field">
             <select
-              defaultValue="_default"
               className="browser-default"
               name="tech"
-              value={tech}
+              value={tech || "_default"}
               onChange={(e) => setTech(e.target.value)}
             >
               <option value="_default" disabled>
                 Select technician
               </option>
-              <option value="John">John</option>
-              <option value="Mark">Mark</option>
-              <option value="Susan">Susan</option>
+              <TechSelectOptions />
             </select>
           </div>
         </div>
@@ -117,7 +115,7 @@ const mapStateToProps = (state) => ({
 });
 
 EditLogModal.propTypes = {
-  log: PropTypes.object.isRequired,
+  current: PropTypes.object,
   updateLog: PropTypes.func.isRequired,
 };
 
